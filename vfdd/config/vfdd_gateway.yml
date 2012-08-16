@@ -25,7 +25,10 @@ vfdd:
 # vfdd connection information
   host: "mgmt.vfdd.me"
   port: 443
-  api_path: "/datadirector/api/v1"
+# API version, 2.0 is for vFDD2.0 GA or later, 1.1 is for earlier.
+  api_version: "2.0"
+# API path, 2.0 is "/datadirector/api", 1.1 is "/datadirector/api/v1"
+  api_path: "/datadirector/api"
 # LDAP server
   nameserver: "ldap.vfdd.me"
 # credentials of vFDD
