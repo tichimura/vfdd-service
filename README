@@ -76,6 +76,16 @@ cloudfoundry/vcap/bin/services/vfdd_gateway with contents:
   #!/usr/bin/env ruby
   exec(File.expand_path("../../../services/vfdd/bin/vfdd_gateway", __FILE__), *ARGV)
 
+[WorkAround]
+1) When startup with vcap_dev start, you will see the line like, 
+
+"Skipping invalid component: vfdd_gateway_gateway"
+"Skipping invalid component: vfdd_gateway_node"
+
+To fix it, you need to add "vfdd" at the end of the list, just before the line of \
+ServiceComponent.register("#{service}_gateway") \
+in ${PATH_OF_CLOUDFOUNDRY_INSTALLATION}/cloudfoundry/vcap/dev_setup/lib/vcap_components.rb \
+
 == Internals of the service gateway
 
 To reduce the response time when the Cloud Foundry user request a vFDD 
