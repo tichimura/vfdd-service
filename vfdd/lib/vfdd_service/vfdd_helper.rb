@@ -26,7 +26,12 @@ class VCAP::Services::Vfdd::Helper
 
     @host = vfdd_config[:host]
     @port = vfdd_config[:port] || 443
-    @api_path = vfdd_config[:api_path] || '/datadirector/api/v1'
+    @api_version = vfdd_config[:api_version]
+    if @api_version == '1.1'
+      @api_path = vfdd_config[:api_path] || '/datadirector/api/v1'
+    else
+      @api_path = vfdd_config[:api_path] || '/datadirector/api'
+    end
     @nameserver = vfdd_config[:nameserver]
     @username = vfdd_config[:username]
     @password = vfdd_config[:password]
@@ -112,6 +117,8 @@ class VCAP::Services::Vfdd::Helper
     end
   end
 
+# For ver 2.0 Beta: No name is configured for both templates, may need to change 'name' to 'description'
+
   def get_resource_by_name(uris, name)
     uris.each do |e|
       resource = http_request(:GET, URI(e['href']).path)
@@ -131,8 +138,13 @@ class VCAP::Services::Vfdd::Helper
     get_resource_by_name(dbgs, name) if dbgs
   end
 
+# For ver 2.0 GA: database resource template is changed to resourcetemplates
   def get_template_by_name(org_id, name)
-    tmps = http_request(:GET, '%s/org/%s/databasetemplates' % [@api_path, org_id])
+    if @api_version == '1.1'
+      tmps = http_request(:GET, '%s/org/%s/databasetemplates' % [@api_path, org_id])
+    else
+      tmps = http_request(:GET, '%s/org/%s/resourcetemplates' % [@api_path, org_id])
+    end
     get_resource_by_name(tmps, name) if tmps
   end
 
